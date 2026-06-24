@@ -6,7 +6,7 @@ import sys
 
 if __name__ == "__main__":
     base_url = "https://jsonplaceholder.typicode.com"
-    employee_id = sys.argv[1]
+    employee_id = int(sys.argv[1])
 
     user = requests.get("{}/users/{}".format(base_url, employee_id)).json()
     todos = requests.get(
@@ -19,7 +19,6 @@ if __name__ == "__main__":
     done = len(done_tasks)
 
     print("Employee {} is done with tasks({}/{}):".format(
-        employee_name, done, total
-    ))
+        employee_name, done, total))
     for task in done_tasks:
         print("\t {}".format(task.get("title")))
