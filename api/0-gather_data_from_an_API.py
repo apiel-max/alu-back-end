@@ -1,24 +1,23 @@
 #!/usr/bin/python3
-"""Script that returns information about an employee's TODO list progress."""
+"""Gather employee TODO list progress from REST API."""
 import requests
 import sys
 
 
 if __name__ == "__main__":
-    base_url = "https://jsonplaceholder.typicode.com"
     employee_id = int(sys.argv[1])
+    base = "https://jsonplaceholder.typicode.com"
 
-    user = requests.get("{}/users/{}".format(base_url, employee_id)).json()
+    user = requests.get("{}/users/{}".format(base, employee_id)).json()
     todos = requests.get(
-        "{}/todos?userId={}".format(base_url, employee_id)
+        "{}/todos".format(base), params={"userId": employee_id}
     ).json()
 
-    employee_name = user.get("name")
-    done_tasks = [task for task in todos if task.get("completed")]
-    total = len(todos)
-    done = len(done_tasks)
+    name = user.get("name")
+    done = [t for t in todos if t.get("completed")]
 
     print("Employee {} is done with tasks({}/{}):".format(
-        employee_name, done, total))
-    for task in done_tasks:
+        name, len(done), len(todos)
+    ))
+    for task in done:
         print("\t {}".format(task.get("title")))
